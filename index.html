@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
     <title>Document</title>
+    <script src="https://code.jquery.com/jquery.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -22,19 +23,18 @@
 
                     <button type="button" class="btn btn-primary" onclick="this.style.visibility = 'hidden'; playGame()">Play
                         Game</button>
+                    <h1 class="countdown">00:30</h2>
 
                 </div>
-                <div class="row timer-space">
-                    <h1 class="countdown">00:30</h2>
-                </div>
-                <div class="row alerts">
-                    <h4 class="question-answer">Question/Answer Here</h4>
-                </div>
-                <div class="row multi-choice">
-                    <h3 class="col-12 option-one"></h3>
-                    <h3 class="col-12 option-two"></h3>
-                    <h3 class="col-12 option-three"></h3>
-                    <h3 class="col-12 option-four"></h3>
+                <div class="row q-card">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            <!-- appended current-question goes here -->
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <!-- appended current-multi-choice goes here -->
+                        </ul>
+                    </div>
                 </div>
                 <div class="answer-image">
                     <!-- APPEND AN IMAGE -->
@@ -44,9 +44,6 @@
             </div>
         </div>
     </div>
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Script -->
     <script src="assets/javascript/app.js"></script>
 
