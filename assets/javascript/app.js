@@ -15,7 +15,7 @@ var trivia = [
     q3 = {
         question: "Who does the English voice acting for Faye Valentine?",
         answer: ["Melissa Fahn", "Wendee Lee", "Ellen Page", "Aoi Tada"],
-        correct: 2
+        correct: 1
     },
     q4 = {
         question: "Who directed Cowboy Bebop?",
@@ -45,6 +45,11 @@ var trivia = [
 ];
 
 // Global Variables///////////////////////////////////////////////////////////////////////////////////////
+var correctGIF = ["assets/images/answer/correct/correct0.gif", "assets/images/answer/correct/correct1.gif", "assets/images/answer/correct/correct2.gif", "assets/images/answer/correct/correct3.gif", ];
+var wrongGIF = ["assets/images/answer/incorrect/wrong0.gif", "assets/images/answer/incorrect/wrong1.gif", "assets/images/answer/incorrect/wrong2.gif", "assets/images/answer/incorrect/wrong3.gif", ];
+var randFour = 0;
+var correctMessage;
+var wrongMessage;
 var funcAudio;
 var countCorrect = 0;
 var countWrong = 0;
@@ -52,6 +57,45 @@ var RNG = 0;
 var currentQ;
 var currentA;
 var lastQuestion = false;
+var timerRunning = false;
+var intervalId;
+var time = 31;
+
+function gifCorrect() {
+
+    time = 31;
+    stop();
+    $(".answer-image").empty();
+    randFour = Math.floor(Math.random() * 4);
+    var cGIF = correctGIF[randFour];
+    var gifCImage = $("<img src='" + cGIF + "'>");
+    $(".list-group-flush").empty()
+
+    correctMessage = $("<div id='correctMessage'>").text("That was correct!");
+    $(".answer-image").append(gifCImage).append(correctMessage);
+    setTimeout(clearCard, 1000 * 5);
+    setTimeout(createTrivia, 1000 * 5);
+    setTimeout(start, 5000);
+
+};
+
+function gifWrong() {
+
+    time = 31;
+    stop();
+    $(".answer-image").empty();
+    randFour = Math.floor(Math.random() * 4);
+    var wGIF = wrongGIF[randFour];
+    var gifWImage = $("<img src='" + wGIF + "'>");
+    $(".list-group-flush").empty()
+
+    wrongMessage = $("<div id='incorrectMessage'>").text("That was incorrect!");
+    $(".answer-image").append(gifWImage).append(wrongMessage);
+    setTimeout(clearCard, 1000 * 5);
+    setTimeout(createTrivia, 1000 * 5);
+    setTimeout(start, 5000);
+
+};
 
 // Possible variables for hide/show///////////////////////////////////////////////////////////////////////
 $(".q-card").hide();
@@ -61,6 +105,7 @@ $(".countdown").hide();
 function playGame() {
 
     var funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
+    $(".playGame").hide();
     $(".trivia-area").show();
     $(".q-card").show();
     $(".countdown").show();
@@ -69,14 +114,9 @@ function playGame() {
     console.log(funcAudio);
     return funcAudio
 
-
 };
 
 // Timer Countdown/////////////////////////////////////////////////////////////////////////////////////////
-var timerRunning = false;
-var intervalId;
-var time = 30;
-
 function start() {
     if (!timerRunning) {
         intervalId = setInterval(countDown, 1000);
@@ -89,11 +129,11 @@ function stop() {
 };
 
 function timesUp() {
-    stop();
-    clearCard();
-    time = 30;
-    console.log("Time Up, you reached 00:00");
-    // next question/////////////////////////////////////////////////////////////////////////////////////////
+
+    gifWrong();
+    $(".card-header").text("That's incorrect!");
+    countWrong++;
+    console.log("Wrong: " + countWrong);
 };
 
 function countDown() {
@@ -121,19 +161,30 @@ function timeConverter(t) {
 
 function createTrivia() {
 
+    $(".answer-image").empty();
 
+    // $(".list-group-item").hover(function () {
+    //         $(this).css("background-color", "#1ec9f7");
+    //     },
+    //     function () {
+    //         $(this).css("background-color", "#1ec9f7");
+    //     });
 
     if (lastQuestion === true && countCorrect >= countWrong) {
+        stop();
         alert("Nice work! Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
-        $(".q-card").hide();
-        $(".countdown").hide();
-    }
+        $(".container").hide();
+        $(".body").css("background-image", "url(assets/images/background/tan.jpg)");
+        return;
+    };
 
     if (lastQuestion === true && countWrong >= countCorrect) {
+        stop();
         alert("Do you even watch this anime? Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
-        $(".q-card").hide();
-        $(".countdown").hide();
-    }
+        $(".container").hide();
+        $(".body").css("background-image", "url(assets/images/background/black.jpg)");
+        return;
+    };
 
     var shuffleDeck = shuffle(trivia);
     currentQ = shuffleDeck.pop();
@@ -143,7 +194,6 @@ function createTrivia() {
     for (var i = 0; i < 4; i++) {
         var triviaList = $("<li class='list-group-item' id='choices' data-id='" + i + "'>").text(currentQ.answer[i]);
         $(".list-group-flush").append(triviaList);
-        // choice - " + unique[i] + "'
     };
 
     if (shuffleDeck.length === 0) {
@@ -153,26 +203,21 @@ function createTrivia() {
 
 
 $(".list-group").on("click", "#choices", function () {
-    console.log("I was clicked");
-    console.log("This is my value: " + $(this).data("id"));
+
     var userChoice = $(this).data("id");
     currentA = currentQ.correct;
 
     if (currentA === userChoice) {
         console.log("That's correct!.");
         countCorrect++;
-        console.log("Answers right: " + countCorrect);
-        clearCard();
-        time = 30;
-        createTrivia();
+        $(".card-header").text("Answers right: " + countCorrect);
+        gifCorrect();
     } else {
-        console.log("That's incorrect!");
+        $(".card-header").text("That's incorrect!");
         countWrong++;
         console.log("Wrong: " + countWrong);
-        clearCard();
-        time = 30;
-        createTrivia();
-    }
+        gifWrong();
+    };
 });
 
 function clearCard() {
@@ -180,86 +225,28 @@ function clearCard() {
     $(".list-group-flush").empty();
 };
 
-// function correctAnswer() {
-//     // timer here before next question appears///////////////////////////////////////////////////////////////////
-//     timerRunning = false;
-// }
-
-// function inccorrectAnswer() {
-//     timerRunning = false;
-// }
-
 // Fischer Yates randomize array /////////////////////////////////////////////////////////////////////////////////
 function shuffle(array) {
 
     var m = array.length,
         t, i;
-
     // While there remain elements to shuffle…/////////////////////////////////////////////////////////////////////
-
     while (m) {
-
         // Pick a remaining element…
         i = Math.floor(Math.random() * m--);
-
         // And swap it with the current element.//////////////////////////////////////////////////////////////////
         t = array[m];
         array[m] = array[i];
         array[i] = t;
     };
-
     return array;
 };
 
+// $(".list-group").hover(function () {
+//         $(this).css("background-color", "#1ec9f7");
+//     },
+//     function () {
+//         $(this).css("background-color", "#1ec9f7");
+//     });
 
-function playGame() {
-
-    var funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
-    $(".trivia-area").show();
-    $(".q-card").show();
-    $(".countdown").show();
-    funcAudio.play();
-    start();
-    console.log(funcAudio);
-    return funcAudio
-
-};
-
-createTrivia();
-$(document).on("click", ".list-group", createTrivia);
-// $(document).on("click", ".movie", correctChoice);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Always 4 options
-// reset of question all options are reset to FALSE
-// when one of 4 text spaces is clicked sets that element to TRUE
-// makes other buttons disappear
-//
-// 1. An obj that holds the question, choices (with the correct and 3 false answers), images.
-// 
-// function Car(question, answerArray, boolean, image) {
-//  this.question = question;
-//  this.answerArray = answerArray;
-//  this.boolean = boolean;
-//  this.image = image;
-// }
-// 
-// 2. Clickability on all choices, scrollover changes color of div text
-// 
-// 3. True/False booleans in all choices
-// 
-// 4. Just one instance of If / Else / do this
-// 
-// 5. A function that creates an obj randomly from the list of objects
-// 
-// 6. A countdown function :30 seconds to answer; if time equals 00 then function CreateObj()
-// 
-// 7. That was correct 'screen', timer move on to next question in 5 seconds
-//          The scenario is similar for wrong answers and time-outs.
-//          If the player runs out of time, tell the player that time's up and display the correct answer. Wait a few seconds, then show the next question.
-//          If the player chooses the wrong answer, tell the player they selected the wrong option and then display the correct answer.Wait a few seconds, then show the next question.
-// 8. Game over screen
-// 
-// 9. Win Screen (show correct answers, incorrect answers, and an option to restart the game (without reloading the page).
-// 
-// 10. Solution if you would like to put it in an object
+// $(document).on("click", ".list-group", createTrivia);

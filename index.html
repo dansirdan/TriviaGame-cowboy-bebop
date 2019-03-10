@@ -20,26 +20,28 @@
                     <h1>Cowboy Bebop</h1>
                 </div>
                 <div class="row playGame">
-
-                    <button type="button" class="btn btn-primary" onclick="this.style.visibility = 'hidden'; playGame()">Play
+                    <button type="button" class="btn btn-primary" onclick="this.style.visibility = 'hidden'; playGame(), createTrivia()">Play
                         Game</button>
-                    <h1 class="countdown">00:30</h2>
-
+                </div>
+                <div class="row blue-boy">
+                    <h2 class="countdown">00:30</h2>
                 </div>
                 <div class="row q-card">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header">
-                            <!-- appended current-question goes here -->
+                    <div class="col card-holder">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                <!-- appended current-question goes here -->
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <!-- appended current-multi-choice goes here -->
+                            </ul>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <!-- appended current-multi-choice goes here -->
-                        </ul>
                     </div>
-                </div>
-                <div class="answer-image">
-                    <!-- APPEND AN IMAGE -->
-                    <!-- A) IF CORRECT -->
-                    <!-- B) IF INCORRECT -->
+                    <div class="col answer-image">
+                        <!-- APPEND AN IMAGE -->
+                        <!-- A) IF CORRECT -->
+                        <!-- B) IF INCORRECT -->
+                    </div>
                 </div>
             </div>
         </div>

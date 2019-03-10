@@ -8,21 +8,43 @@ body {
 }
 
 .container {
-    margin-top: 400px;
-    margin-left: 70px;
-    width: 350px;
     text-align: center;
-    background-color: #fffbf2;
-    border: solid thick #1ec9f7;
     font-family: fantasy;
+    background: #ff197b;
 }
 
 .row {
-    border: solid thin midnightblue;
+    border: solid thick #ff197b;
     padding: 10px;
     background-color: #fffbf2;
 }
 
 .pinkboy {
     background: #ff197b;
+    border: solid thick #1ec9f7;
 }
+
+h1,
+.btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.countdown {
+    background-color: #1ec9f7;
+    color: #fffbf2;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
+
+.list-group-item:hover {
+    background: #1ec9f7;
+}
+
+/* .trivia-area {
+    background: #ff197b;
+    background-color: #fffbf2;
+} */
