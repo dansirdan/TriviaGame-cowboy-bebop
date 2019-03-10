@@ -46,36 +46,36 @@ function resetGame() {
         answer: ["Domino", "Vincent", "Naruto", "Spike"],
         correct: 3
     });
-    trivia.push({
-        question: "Who does the English voice acting for Faye Valentine?",
-        answer: ["Melissa Fahn", "Wendee Lee", "Ellen Page", "Aoi Tada"],
-        correct: 1
-    });
-    trivia.push({
-        question: "Who directed Cowboy Bebop?",
-        answer: ["Yoko Nobumoto", "Shinichiro Watanabe", "Michael Bay", "Sunrise"],
-        correct: 1
-    });
-    trivia.push({
-        question: "Spike and Vicious were once members of this Syndicate...",
-        answer: ["Red Lotus Syndicate", "Green Dragon Syndicate", "Red Tiger", "Red Dragon Syndicate"],
-        correct: 3
-    });
-    trivia.push({
-        question: "What is the name of the blues and jazz band that was created by Yoko Kanno to perform the music of the anime?",
-        answer: ["Seatbelts", "Bebop", "Tank!", "Space Dandy"],
-        correct: 0
-    });
-    trivia.push({
-        question: "In the episode 'Stray Dog Strut' which character made their first appearance?",
-        answer: ["Hakim", "Ein", "Vicious", "Rocco Bonnaro"],
-        correct: 1
-    });
-    trivia.push({
-        question: "How many episodes are there, not including the 'Mish-Mash Blues'?",
-        answer: ["35", "15", "25", "26"],
-        correct: 3
-    });
+    // trivia.push({
+    //     question: "Who does the English voice acting for Faye Valentine?",
+    //     answer: ["Melissa Fahn", "Wendee Lee", "Ellen Page", "Aoi Tada"],
+    //     correct: 1
+    // });
+    // trivia.push({
+    //     question: "Who directed Cowboy Bebop?",
+    //     answer: ["Yoko Nobumoto", "Shinichiro Watanabe", "Michael Bay", "Sunrise"],
+    //     correct: 1
+    // });
+    // trivia.push({
+    //     question: "Spike and Vicious were once members of this Syndicate...",
+    //     answer: ["Red Lotus Syndicate", "Green Dragon Syndicate", "Red Tiger", "Red Dragon Syndicate"],
+    //     correct: 3
+    // });
+    // trivia.push({
+    //     question: "What is the name of the blues and jazz band that was created by Yoko Kanno to perform the music of the anime?",
+    //     answer: ["Seatbelts", "Bebop", "Tank!", "Space Dandy"],
+    //     correct: 0
+    // });
+    // trivia.push({
+    //     question: "In the episode 'Stray Dog Strut' which character made their first appearance?",
+    //     answer: ["Hakim", "Ein", "Vicious", "Rocco Bonnaro"],
+    //     correct: 1
+    // });
+    // trivia.push({
+    //     question: "How many episodes are there, not including the 'Mish-Mash Blues'?",
+    //     answer: ["35", "15", "25", "26"],
+    //     correct: 3
+    // });
 };
 
 function gifCorrect() {
@@ -87,7 +87,7 @@ function gifCorrect() {
     var gifCImage = $("<img src='" + cGIF + "'>");
     $(".list-group-flush").empty()
 
-    correctMessage = $("<div id='correctMessage'>").text("That was correct!");
+    correctMessage = $("<div id='correctMessage'>").text("The answer was: " + currentQ.answer[currentA] + ".");
     $(".answer-image").append(gifCImage).append(correctMessage);
     setTimeout(clearCard, 3000);
     setTimeout(createTrivia, 3000);
@@ -103,8 +103,7 @@ function gifWrong() {
     var wGIF = wrongGIF[randFour];
     var gifWImage = $("<img src='" + wGIF + "'>");
     $(".list-group-flush").empty()
-
-    wrongMessage = $("<div id='incorrectMessage'>").text("That was incorrect!");
+    wrongMessage = $("<div id='incorrectMessage'>").text("The answer was: " + currentQ.answer[currentA] + ".");
     $(".answer-image").append(gifWImage).append(wrongMessage);
     setTimeout(clearCard, 3000);
     setTimeout(createTrivia, 3000);
@@ -121,6 +120,7 @@ $(".new-game").hide();
 // CREATE ALL THE THINGS//////////////////////////////////////////////////////////////////////////////////
 function playGame() {
 
+    stop();
     resetGame();
     var funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
     $(".play-game").hide();
@@ -183,6 +183,7 @@ function createTrivia() {
     $(".answer-image").empty();
 
     if (lastQuestion === true && countCorrect >= countWrong) {
+        lastQuestion = false;
         stop();
         alert("Nice work! Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
         // $(".container").hide();
@@ -190,17 +191,23 @@ function createTrivia() {
         $(".title-space").hide();
         $(".blue-boy").hide();
         $(".play-game").hide();
+        countCorrect = 0;
+        countWrong = 0;
         if (confirm("Play again?") !== true) {
             stop();
-            return;
+            resetGame()
+            // return;
         } else {
             stop();
             $(".new-game").show();
-            return;
+            resetGame()
+
         };
+        // return;
     };
 
     if (lastQuestion === true && countWrong >= countCorrect) {
+        lastQuestion = false;
         stop();
         alert("Do you even watch this anime? Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
         // $(".container").hide();
@@ -210,13 +217,15 @@ function createTrivia() {
         $(".play-game").hide();
         if (confirm("Play again?") !== true) {
             stop();
-            return;
+            resetGame()
+            // return;
         } else {
             stop();
+            resetGame()
             $(".new-game").show();
-            return;
+            // return;
         };
-
+        // return;
     };
 
     var shuffleDeck = shuffle(trivia);
@@ -241,14 +250,13 @@ $(".list-group").on("click", "#choices", function () {
     currentA = currentQ.correct;
 
     if (currentA === userChoice) {
-        console.log("That's correct!.");
+
         countCorrect++;
-        $(".card-header").text("Answers right: " + countCorrect);
+        $(".card-header").text("That's " + countCorrect + " correct!");
         gifCorrect();
     } else {
-        $(".card-header").text("That's incorrect!");
         countWrong++;
-        console.log("Wrong: " + countWrong);
+        $(".card-header").text("That's " + countWrong + " incorrect so far.");
         gifWrong();
     };
 });
