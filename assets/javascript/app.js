@@ -1,48 +1,4 @@
-// Cowboy Bebob Trivia Game////////////////////////////////////////////////////////////////////////////////
-
-// An Array of Object-Questions////////////////////////////////////////////////////////////////////////////
-var trivia = [
-    q1 = {
-        question: "What year was Cowboy Bebop released in Japan?",
-        answer: ["1998", "2001", "1985", "2015"],
-        correct: 0
-    },
-    q2 = {
-        question: "Who is the main protagonist of Cowboy Bebop?",
-        answer: ["Domino", "Vincent", "Naruto", "Spike"],
-        correct: 3
-    },
-    q3 = {
-        question: "Who does the English voice acting for Faye Valentine?",
-        answer: ["Melissa Fahn", "Wendee Lee", "Ellen Page", "Aoi Tada"],
-        correct: 1
-    },
-    q4 = {
-        question: "Who directed Cowboy Bebop?",
-        answer: ["Yoko Nobumoto", "Shinichiro Watanabe", "Michael Bay", "Sunrise"],
-        correct: 1
-    },
-    q5 = {
-        question: "Spike and Vicious were once members of this Syndicate...",
-        answer: ["Red Lotus Syndicate", "Green Dragon Syndicate", "Red Tiger", "Red Dragon Syndicate"],
-        correct: 3
-    },
-    q6 = {
-        question: "What is the name of the blues and jazz band that was created by Yoko Kanno to perform the music of the anime?",
-        answer: ["Seatbelts", "Bebop", "Tank!", "Space Dandy"],
-        correct: 0
-    },
-    q7 = {
-        question: "In the episode 'Stray Dog Strut' which character made their first appearance?",
-        answer: ["Hakim", "Ein", "Vicious", "Rocco Bonnaro"],
-        correct: 1
-    },
-    q8 = {
-        question: "How many episodes are there, not including the 'Mish-Mash Blues'?",
-        answer: ["35", "15", "25", "26"],
-        correct: 3
-    }
-];
+// Cowboy Bebob Trivia Game///////////////////////////////////////////////////////////////////////////////
 
 // Global Variables///////////////////////////////////////////////////////////////////////////////////////
 var correctGIF = ["assets/images/answer/correct/correct0.gif", "assets/images/answer/correct/correct1.gif", "assets/images/answer/correct/correct2.gif", "assets/images/answer/correct/correct3.gif", ];
@@ -59,12 +15,72 @@ var currentA;
 var lastQuestion = false;
 var timerRunning = false;
 var intervalId;
-var time = 31;
+var time = 11;
+var trivia;
+// resetGame();
+
+// An Array of Object-Questions///////////////////////////////////////////////////////////////////////////
+function resetGame() {
+
+    randFour = 0;
+    correctMessage;
+    wrongMessage;
+    funcAudio;
+    countCorrect = 0;
+    countWrong = 0;
+    RNG = 0;
+    currentQ;
+    currentA;
+    lastQuestion = false;
+    timerRunning = false;
+    intervalId;
+    time = 11;
+    trivia = [];
+    trivia.push({
+        question: "What year was Cowboy Bebop released in Japan?",
+        answer: ["1998", "2001", "1985", "2015"],
+        correct: 0
+    });
+    trivia.push({
+        question: "Who is the main protagonist of Cowboy Bebop?",
+        answer: ["Domino", "Vincent", "Naruto", "Spike"],
+        correct: 3
+    });
+    trivia.push({
+        question: "Who does the English voice acting for Faye Valentine?",
+        answer: ["Melissa Fahn", "Wendee Lee", "Ellen Page", "Aoi Tada"],
+        correct: 1
+    });
+    trivia.push({
+        question: "Who directed Cowboy Bebop?",
+        answer: ["Yoko Nobumoto", "Shinichiro Watanabe", "Michael Bay", "Sunrise"],
+        correct: 1
+    });
+    trivia.push({
+        question: "Spike and Vicious were once members of this Syndicate...",
+        answer: ["Red Lotus Syndicate", "Green Dragon Syndicate", "Red Tiger", "Red Dragon Syndicate"],
+        correct: 3
+    });
+    trivia.push({
+        question: "What is the name of the blues and jazz band that was created by Yoko Kanno to perform the music of the anime?",
+        answer: ["Seatbelts", "Bebop", "Tank!", "Space Dandy"],
+        correct: 0
+    });
+    trivia.push({
+        question: "In the episode 'Stray Dog Strut' which character made their first appearance?",
+        answer: ["Hakim", "Ein", "Vicious", "Rocco Bonnaro"],
+        correct: 1
+    });
+    trivia.push({
+        question: "How many episodes are there, not including the 'Mish-Mash Blues'?",
+        answer: ["35", "15", "25", "26"],
+        correct: 3
+    });
+};
 
 function gifCorrect() {
 
     stop();
-    time = 31;
     $(".answer-image").empty();
     randFour = Math.floor(Math.random() * 4);
     var cGIF = correctGIF[randFour];
@@ -73,16 +89,15 @@ function gifCorrect() {
 
     correctMessage = $("<div id='correctMessage'>").text("That was correct!");
     $(".answer-image").append(gifCImage).append(correctMessage);
-    setTimeout(clearCard, 1000 * 5);
-    setTimeout(createTrivia, 1000 * 5);
-    setTimeout(start, 5000);
+    setTimeout(clearCard, 3000);
+    setTimeout(createTrivia, 3000);
+    setTimeout(start, 3000);
 
 };
 
 function gifWrong() {
 
     stop();
-    time = 31;
     $(".answer-image").empty();
     randFour = Math.floor(Math.random() * 4);
     var wGIF = wrongGIF[randFour];
@@ -91,9 +106,9 @@ function gifWrong() {
 
     wrongMessage = $("<div id='incorrectMessage'>").text("That was incorrect!");
     $(".answer-image").append(gifWImage).append(wrongMessage);
-    setTimeout(clearCard, 1000 * 5);
-    setTimeout(createTrivia, 1000 * 5);
-    setTimeout(start, 5000);
+    setTimeout(clearCard, 3000);
+    setTimeout(createTrivia, 3000);
+    setTimeout(start, 3000);
 
 };
 
@@ -101,12 +116,15 @@ function gifWrong() {
 $(".q-card").hide();
 $(".title-space").hide();
 $(".blue-boy").hide();
+$(".new-game").hide();
 
 // CREATE ALL THE THINGS//////////////////////////////////////////////////////////////////////////////////
 function playGame() {
 
+    resetGame();
     var funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
     $(".play-game").hide();
+    $(".new-game").hide();
     $(".title-space").show();
     $(".trivia-area").show();
     $(".q-card").show();
@@ -128,6 +146,7 @@ function start() {
 function stop() {
     clearInterval(intervalId);
     clockRunning = false;
+    time = 11;
 };
 
 function timesUp() {
@@ -166,17 +185,38 @@ function createTrivia() {
     if (lastQuestion === true && countCorrect >= countWrong) {
         stop();
         alert("Nice work! Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
-        $(".container").hide();
-        $(".body").css("background-image", "url(assets/images/background/tan.jpg)");
-        return;
+        // $(".container").hide();
+        $(".q-card").hide();
+        $(".title-space").hide();
+        $(".blue-boy").hide();
+        $(".play-game").hide();
+        if (confirm("Play again?") !== true) {
+            stop();
+            return;
+        } else {
+            stop();
+            $(".new-game").show();
+            return;
+        };
     };
 
     if (lastQuestion === true && countWrong >= countCorrect) {
         stop();
         alert("Do you even watch this anime? Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
-        $(".container").hide();
-        $(".body").css("background-image", "url(assets/images/background/black.jpg)");
-        return;
+        // $(".container").hide();
+        $(".q-card").hide();
+        $(".title-space").hide();
+        $(".blue-boy").hide();
+        $(".play-game").hide();
+        if (confirm("Play again?") !== true) {
+            stop();
+            return;
+        } else {
+            stop();
+            $(".new-game").show();
+            return;
+        };
+
     };
 
     var shuffleDeck = shuffle(trivia);
