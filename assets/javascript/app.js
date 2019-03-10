@@ -49,9 +49,9 @@ var funcAudio;
 var countCorrect = 0;
 var countWrong = 0;
 var RNG = 0;
-var shuffleDeck;
 var currentQ;
 var currentA;
+var lastQuestion = false;
 
 // Possible variables for hide/show///////////////////////////////////////////////////////////////////////
 $(".q-card").hide();
@@ -69,19 +69,13 @@ function playGame() {
     console.log(funcAudio);
     return funcAudio
 
+
 };
 
 // Timer Countdown/////////////////////////////////////////////////////////////////////////////////////////
-// window.onload = function() {
-//   $("#lap").on("click", stopwatch.recordLap);
-//   $("#stop").on("click", stopwatch.stop);
-//   $("#reset").on("click", stopwatch.reset);
-//   $("#start").on("click", stopwatch.start);
-// };
 var timerRunning = false;
 var intervalId;
 var time = 30;
-
 
 function start() {
     if (!timerRunning) {
@@ -89,12 +83,10 @@ function start() {
     };
 };
 
-
 function stop() {
     clearInterval(intervalId);
     clockRunning = false;
 };
-
 
 function timesUp() {
     stop();
@@ -104,13 +96,11 @@ function timesUp() {
     // next question/////////////////////////////////////////////////////////////////////////////////////////
 };
 
-
 function countDown() {
     time--;
     var converted = timeConverter(time);
     $(".countdown").text(converted);
 };
-
 
 function timeConverter(t) {
     var minutes = Math.floor(t / 60);
@@ -128,102 +118,61 @@ function timeConverter(t) {
     };
     return minutes + ":" + seconds;
 };
-var unique = ["a", "b", "c", "d"];
 
 function createTrivia() {
 
-    shuffleDeck = shuffle(trivia);
+
+
+    if (lastQuestion === true && countCorrect >= countWrong) {
+        alert("Nice work! Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
+        $(".q-card").hide();
+        $(".countdown").hide();
+    }
+
+    if (lastQuestion === true && countWrong >= countCorrect) {
+        alert("Do you even watch this anime? Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
+        $(".q-card").hide();
+        $(".countdown").hide();
+    }
+
+    var shuffleDeck = shuffle(trivia);
     currentQ = shuffleDeck.pop();
     currentA = currentQ.correct;
     $(".card-header").text(currentQ.question);
 
     for (var i = 0; i < 4; i++) {
-        var triviaList = $("<li class='list-group-item choice-" + unique[i] + "' data-id='" + i + "'>").text(currentQ.answer[i]);
+        var triviaList = $("<li class='list-group-item' id='choices' data-id='" + i + "'>").text(currentQ.answer[i]);
         $(".list-group-flush").append(triviaList);
+        // choice - " + unique[i] + "'
+    };
 
+    if (shuffleDeck.length === 0) {
+        return lastQuestion = true;
     };
 };
-createTrivia();
 
 
+$(".list-group").on("click", "#choices", function () {
+    console.log("I was clicked");
+    console.log("This is my value: " + $(this).data("id"));
+    var userChoice = $(this).data("id");
+    currentA = currentQ.correct;
 
-$(".choice-a").click(function () {
-
-    var guess = unique[0];
-    console.log("choice a clicked")
-    console.log(guess);
-
-    if (unique[currentA] === guess) {
+    if (currentA === userChoice) {
         console.log("That's correct!.");
         countCorrect++;
+        console.log("Answers right: " + countCorrect);
         clearCard();
-        timerRunning = false;
-    } else {
-        console.log("That's incorrect!");
-        countWrong++;
-        clearCard();
-        timerRunning = false;
-    }
-});
-
-$(".choice-b").click(function () {
-
-    var guess = unique[1];
-    console.log("choice b clicked")
-    console.log(guess);
-
-    if (unique[currentA] === guess) {
-        console.log("That's correct!.");
-        countCorrect++;
-        clearCard();
-        timerRunning = false;
-    } else {
-        console.log("That's incorrect!");
-        countWrong++;
-        clearCard();
-        timerRunning = false;
-    }
-});
-
-$(".choice-c").click(function () {
-
-    var guess = unique[2];
-    console.log("choice c clicked")
-    console.log(guess);
-
-    if (unique[currentA] === guess) {
-        console.log("That's correct!.");
-        countCorrect++;
-        clearCard();
-        timerRunning = false;
-    } else {
-        console.log("That's incorrect!");
-        countWrong++;
-        clearCard();
-        timerRunning = false;
-    }
-});
-
-$(".choice-d").click(function () {
-
-    var guess = unique[3];
-    console.log("choice d clicked")
-    console.log(guess);
-
-    if (unique[currentA] === guess) {
-        console.log("That's correct!.");
-        countCorrect++;
-        clearCard();
-        timerRunning = false;
+        time = 30;
         createTrivia();
     } else {
         console.log("That's incorrect!");
         countWrong++;
+        console.log("Wrong: " + countWrong);
         clearCard();
-        timerRunning = false;
+        time = 30;
         createTrivia();
-    };
-
+    }
 });
 
 function clearCard() {
@@ -242,10 +191,12 @@ function clearCard() {
 
 // Fischer Yates randomize array /////////////////////////////////////////////////////////////////////////////////
 function shuffle(array) {
+
     var m = array.length,
         t, i;
 
     // While there remain elements to shuffle…/////////////////////////////////////////////////////////////////////
+
     while (m) {
 
         // Pick a remaining element…
@@ -259,6 +210,24 @@ function shuffle(array) {
 
     return array;
 };
+
+
+function playGame() {
+
+    var funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
+    $(".trivia-area").show();
+    $(".q-card").show();
+    $(".countdown").show();
+    funcAudio.play();
+    start();
+    console.log(funcAudio);
+    return funcAudio
+
+};
+
+createTrivia();
+$(document).on("click", ".list-group", createTrivia);
+// $(document).on("click", ".movie", correctChoice);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Always 4 options
