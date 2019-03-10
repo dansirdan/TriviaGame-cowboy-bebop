@@ -49,11 +49,13 @@ h1,
     width: 70%;
 }
 
-.list-group-item:hover {
-    background: #1ec9f7;
+.card-header {
+    background-color: #fcf505;
 }
 
-/* .trivia-area {
-    background: #ff197b;
-    background-color: #fffbf2;
-} */
+.list-group-item:hover,
+.btn-primary {
+    color: #fffbf2;
+    background-color: #1ec9f7;
+    border-color: #1ec9f7;
+}

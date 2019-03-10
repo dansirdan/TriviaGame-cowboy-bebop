@@ -8,8 +8,8 @@ var trivia = [
         correct: 0
     },
     q2 = {
-        question: "Who is the protagonist of Cowboy Bebop?",
-        answer: ["Edward", "Vincent", "Naruto", "Spike"],
+        question: "Who is the main protagonist of Cowboy Bebop?",
+        answer: ["Domino", "Vincent", "Naruto", "Spike"],
         correct: 3
     },
     q3 = {
@@ -63,8 +63,8 @@ var time = 31;
 
 function gifCorrect() {
 
-    time = 31;
     stop();
+    time = 31;
     $(".answer-image").empty();
     randFour = Math.floor(Math.random() * 4);
     var cGIF = correctGIF[randFour];
@@ -81,8 +81,8 @@ function gifCorrect() {
 
 function gifWrong() {
 
-    time = 31;
     stop();
+    time = 31;
     $(".answer-image").empty();
     randFour = Math.floor(Math.random() * 4);
     var wGIF = wrongGIF[randFour];
@@ -131,11 +131,9 @@ function stop() {
 };
 
 function timesUp() {
-
-    gifWrong();
     $(".card-header").text("That's incorrect!");
     countWrong++;
-    console.log("Wrong: " + countWrong);
+    gifWrong();
 };
 
 function countDown() {
@@ -164,13 +162,6 @@ function timeConverter(t) {
 function createTrivia() {
 
     $(".answer-image").empty();
-
-    // $(".list-group-item").hover(function () {
-    //         $(this).css("background-color", "#1ec9f7");
-    //     },
-    //     function () {
-    //         $(this).css("background-color", "#1ec9f7");
-    //     });
 
     if (lastQuestion === true && countCorrect >= countWrong) {
         stop();
@@ -229,7 +220,6 @@ function clearCard() {
 
 // Fischer Yates randomize array /////////////////////////////////////////////////////////////////////////////////
 function shuffle(array) {
-
     var m = array.length,
         t, i;
     // While there remain elements to shuffle…/////////////////////////////////////////////////////////////////////
@@ -243,12 +233,3 @@ function shuffle(array) {
     };
     return array;
 };
-
-// $(".list-group").hover(function () {
-//         $(this).css("background-color", "#1ec9f7");
-//     },
-//     function () {
-//         $(this).css("background-color", "#1ec9f7");
-//     });
-
-// $(document).on("click", ".list-group", createTrivia);
