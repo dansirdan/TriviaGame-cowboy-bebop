@@ -99,16 +99,18 @@ function gifWrong() {
 
 // Possible variables for hide/show///////////////////////////////////////////////////////////////////////
 $(".q-card").hide();
-$(".countdown").hide();
+$(".title-space").hide();
+$(".blue-boy").hide();
 
 // CREATE ALL THE THINGS//////////////////////////////////////////////////////////////////////////////////
 function playGame() {
 
     var funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
-    $(".playGame").hide();
+    $(".play-game").hide();
+    $(".title-space").show();
     $(".trivia-area").show();
     $(".q-card").show();
-    $(".countdown").show();
+    $(".blue-boy").show();
     funcAudio.play();
     start();
     console.log(funcAudio);

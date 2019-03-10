@@ -8,6 +8,7 @@ body {
 }
 
 .container {
+    margin-top: 50px;
     text-align: center;
     font-family: fantasy;
     background: #ff197b;
@@ -22,6 +23,14 @@ body {
 .pinkboy {
     background: #ff197b;
     border: solid thick #1ec9f7;
+}
+
+.blue-boy {
+    background-color: #1ec9f7;
+}
+
+.q-car {
+    background-color: #fcf505;
 }
 
 h1,
