@@ -167,7 +167,7 @@ function stop() {
 };
 
 function timesUp() {
-    $(".card-header").text("That's incorrect!");
+    $(".card-header").text("Time's Up!");
     countWrong++;
     gifWrong();
 };
