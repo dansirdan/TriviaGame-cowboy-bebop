@@ -41,7 +41,8 @@ h1,
     width: 40%;
 }
 
-.countdown {
+.countdown,
+.endResults {
     background-color: #1ec9f7;
     color: #fffbf2;
     margin-left: auto;

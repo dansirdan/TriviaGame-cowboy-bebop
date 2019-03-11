@@ -17,15 +17,18 @@ var timerRunning = false;
 var intervalId;
 var time = 11;
 var trivia;
+var endGame = false;
+var shuffleDeck;
 // resetGame();
 
 // An Array of Object-Questions///////////////////////////////////////////////////////////////////////////
 function resetGame() {
 
+    start();
     randFour = 0;
     correctMessage;
     wrongMessage;
-    funcAudio;
+    funcAudio = new Audio("");
     countCorrect = 0;
     countWrong = 0;
     RNG = 0;
@@ -33,9 +36,11 @@ function resetGame() {
     currentA;
     lastQuestion = false;
     timerRunning = false;
+    endGame = false;
     intervalId;
     time = 11;
     trivia = [];
+    shuffleDeck;
     trivia.push({
         question: "What year was Cowboy Bebop released in Japan?",
         answer: ["1998", "2001", "1985", "2015"],
@@ -46,36 +51,36 @@ function resetGame() {
         answer: ["Domino", "Vincent", "Naruto", "Spike"],
         correct: 3
     });
-    // trivia.push({
-    //     question: "Who does the English voice acting for Faye Valentine?",
-    //     answer: ["Melissa Fahn", "Wendee Lee", "Ellen Page", "Aoi Tada"],
-    //     correct: 1
-    // });
-    // trivia.push({
-    //     question: "Who directed Cowboy Bebop?",
-    //     answer: ["Yoko Nobumoto", "Shinichiro Watanabe", "Michael Bay", "Sunrise"],
-    //     correct: 1
-    // });
-    // trivia.push({
-    //     question: "Spike and Vicious were once members of this Syndicate...",
-    //     answer: ["Red Lotus Syndicate", "Green Dragon Syndicate", "Red Tiger", "Red Dragon Syndicate"],
-    //     correct: 3
-    // });
-    // trivia.push({
-    //     question: "What is the name of the blues and jazz band that was created by Yoko Kanno to perform the music of the anime?",
-    //     answer: ["Seatbelts", "Bebop", "Tank!", "Space Dandy"],
-    //     correct: 0
-    // });
-    // trivia.push({
-    //     question: "In the episode 'Stray Dog Strut' which character made their first appearance?",
-    //     answer: ["Hakim", "Ein", "Vicious", "Rocco Bonnaro"],
-    //     correct: 1
-    // });
-    // trivia.push({
-    //     question: "How many episodes are there, not including the 'Mish-Mash Blues'?",
-    //     answer: ["35", "15", "25", "26"],
-    //     correct: 3
-    // });
+    trivia.push({
+        question: "Who does the English voice acting for Faye Valentine?",
+        answer: ["Melissa Fahn", "Wendee Lee", "Ellen Page", "Aoi Tada"],
+        correct: 1
+    });
+    trivia.push({
+        question: "Who directed Cowboy Bebop?",
+        answer: ["Yoko Nobumoto", "Shinichiro Watanabe", "Michael Bay", "Sunrise"],
+        correct: 1
+    });
+    trivia.push({
+        question: "Spike and Vicious were once members of this Syndicate...",
+        answer: ["Red Lotus Syndicate", "Green Dragon Syndicate", "Red Tiger", "Red Dragon Syndicate"],
+        correct: 3
+    });
+    trivia.push({
+        question: "What is the name of the blues and jazz band that was created by Yoko Kanno to perform the music of the anime?",
+        answer: ["Seatbelts", "Bebop", "Tank!", "Space Dandy"],
+        correct: 0
+    });
+    trivia.push({
+        question: "In the episode 'Stray Dog Strut' which character made their first appearance?",
+        answer: ["Hakim", "Ein", "Vicious", "Rocco Bonnaro"],
+        correct: 1
+    });
+    trivia.push({
+        question: "How many episodes are there, not including the 'Mish-Mash Blues'?",
+        answer: ["35", "15", "25", "26"],
+        correct: 3
+    });
 };
 
 function gifCorrect() {
@@ -89,10 +94,14 @@ function gifCorrect() {
 
     correctMessage = $("<div id='correctMessage'>").text("The answer was: " + currentQ.answer[currentA] + ".");
     $(".answer-image").append(gifCImage).append(correctMessage);
-    setTimeout(clearCard, 3000);
-    setTimeout(createTrivia, 3000);
-    setTimeout(start, 3000);
-
+    if (lastQuestion !== true) {
+        setTimeout(clearCard, 3000);
+        setTimeout(createTrivia, 3000);
+        setTimeout(start, 3000);
+    } else {
+        clearCard();
+        createTrivia();
+    };
 };
 
 function gifWrong() {
@@ -105,9 +114,15 @@ function gifWrong() {
     $(".list-group-flush").empty()
     wrongMessage = $("<div id='incorrectMessage'>").text("The answer was: " + currentQ.answer[currentA] + ".");
     $(".answer-image").append(gifWImage).append(wrongMessage);
-    setTimeout(clearCard, 3000);
-    setTimeout(createTrivia, 3000);
-    setTimeout(start, 3000);
+
+    if (lastQuestion !== true) {
+        setTimeout(clearCard, 3000);
+        setTimeout(createTrivia, 3000);
+        setTimeout(start, 3000);
+    } else {
+        clearCard();
+        createTrivia();
+    };
 
 };
 
@@ -116,23 +131,25 @@ $(".q-card").hide();
 $(".title-space").hide();
 $(".blue-boy").hide();
 $(".new-game").hide();
+$(".countdown").hide();
 
 // CREATE ALL THE THINGS//////////////////////////////////////////////////////////////////////////////////
 function playGame() {
 
     stop();
     resetGame();
-    var funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
+    funcAudio = new Audio("../TriviaGame-cowboy-bebop/assets/audio/tank.mp3");
     $(".play-game").hide();
     $(".new-game").hide();
+    $(".blue-boy").show();
     $(".title-space").show();
     $(".trivia-area").show();
     $(".q-card").show();
-    $(".blue-boy").show();
+    $(".countdown").show();
+    $(".endResults").hide();
     funcAudio.play();
-    start();
     console.log(funcAudio);
-    return funcAudio
+    createTrivia();
 
 };
 
@@ -180,55 +197,40 @@ function timeConverter(t) {
 
 function createTrivia() {
 
+    time = 11;
     $(".answer-image").empty();
 
     if (lastQuestion === true && countCorrect >= countWrong) {
         lastQuestion = false;
         stop();
-        alert("Nice work! Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
-        // $(".container").hide();
+        $(".endResults").text("Nice work! Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
         $(".q-card").hide();
-        $(".title-space").hide();
-        $(".blue-boy").hide();
         $(".play-game").hide();
-        countCorrect = 0;
-        countWrong = 0;
-        if (confirm("Play again?") !== true) {
-            stop();
-            resetGame()
-            // return;
-        } else {
-            stop();
-            $(".new-game").show();
-            resetGame()
-
-        };
-        // return;
+        $(".countdown").hide();
+        $(".endResults").show();
+        funcAudio.pause();
+        $(".new-game").show();
+        return endGame = true;
     };
 
     if (lastQuestion === true && countWrong >= countCorrect) {
         lastQuestion = false;
         stop();
-        alert("Do you even watch this anime? Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
-        // $(".container").hide();
+        $(".endResults").text("Do you even watch this anime? Your total correct was " + countCorrect + ", and your total wrong was " + countWrong + ".");
         $(".q-card").hide();
-        $(".title-space").hide();
-        $(".blue-boy").hide();
         $(".play-game").hide();
-        if (confirm("Play again?") !== true) {
-            stop();
-            resetGame()
-            // return;
-        } else {
-            stop();
-            resetGame()
-            $(".new-game").show();
-            // return;
-        };
-        // return;
+        $(".countdown").hide();
+        $(".endResults").show();
+        funcAudio.pause();
+        $(".new-game").show();
+        return endGame = true;
     };
 
-    var shuffleDeck = shuffle(trivia);
+    if (endGame === true) {
+        return false;
+    }
+
+    shuffleDeck = shuffle(trivia);
     currentQ = shuffleDeck.pop();
     currentA = currentQ.correct;
     $(".card-header").text(currentQ.question);
@@ -250,7 +252,6 @@ $(".list-group").on("click", "#choices", function () {
     currentA = currentQ.correct;
 
     if (currentA === userChoice) {
-
         countCorrect++;
         $(".card-header").text("That's " + countCorrect + " correct!");
         gifCorrect();
