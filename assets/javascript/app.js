@@ -85,7 +85,10 @@ function resetGame() {
 
 function gifCorrect() {
 
+
+    time = 11;
     stop();
+    $(".countdown").hide();
     $(".answer-image").empty();
     randFour = Math.floor(Math.random() * 4);
     var cGIF = correctGIF[randFour];
@@ -95,9 +98,9 @@ function gifCorrect() {
     correctMessage = $("<div id='correctMessage'>").text("The answer was: " + currentQ.answer[currentA] + ".");
     $(".answer-image").append(gifCImage).append(correctMessage);
     if (lastQuestion !== true) {
+        setTimeout(start, 2000);
         setTimeout(clearCard, 3000);
         setTimeout(createTrivia, 3000);
-        setTimeout(start, 3000);
     } else {
         clearCard();
         createTrivia();
@@ -106,7 +109,9 @@ function gifCorrect() {
 
 function gifWrong() {
 
+    time = 11;
     stop();
+    $(".countdown").hide();
     $(".answer-image").empty();
     randFour = Math.floor(Math.random() * 4);
     var wGIF = wrongGIF[randFour];
@@ -116,9 +121,9 @@ function gifWrong() {
     $(".answer-image").append(gifWImage).append(wrongMessage);
 
     if (lastQuestion !== true) {
+        setTimeout(start, 2000);
         setTimeout(clearCard, 3000);
         setTimeout(createTrivia, 3000);
-        setTimeout(start, 3000);
     } else {
         clearCard();
         createTrivia();
@@ -198,6 +203,7 @@ function timeConverter(t) {
 function createTrivia() {
 
     time = 11;
+    $(".countdown").show();
     $(".answer-image").empty();
 
     if (lastQuestion === true && countCorrect >= countWrong) {
