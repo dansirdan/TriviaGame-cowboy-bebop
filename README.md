@@ -5,6 +5,8 @@ https://dansirdan.github.io/TriviaGame-cowboy-bebop/
 
 Hard Assignment challenge
 
+- BONUS: plays "Tank!" The main theme of the anime at the start of the game.
+
 - A trivia game that shows only one question until the player answers it or their time runs out.
 
 - If the player selects the correct answer, it shows a screen congratulating them for choosing the right option. After a few seconds, it displays the next question without user input.
